@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Image Alignment Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #image-container {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ccc;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+
+        #image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+        }
+
+        label {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 15px;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            font-family: monospace;
+            font-size: 12px;
+            background: #eaeaea;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="image-container">
+            <img id="image" src="https://via.placeholder.com/150" alt="Placeholder Image">
+        </div>
+        <div class="controls">
+            <label for="x-axis">X Position:</label>
+            <input type="range" id="x-axis" min="0" max="100" value="50">
+            <label for="y-axis">Y Position:</label>
+            <input type="range" id="y-axis" min="0" max="100" value="50">
+            <label for="size">Image Size:</label>
+            <input type="range" id="size" min="50" max="200" value="100">
+            <button id="generate-css">Generate CSS</button>
+            <textarea id="css-output" readonly></textarea>
+        </div>
+    </div>
+
+    <script>
+        const image = document.getElementById('image');
+        const xAxisSlider = document.getElementById('x-axis');
+        const yAxisSlider = document.getElementById('y-axis');
+        const sizeSlider = document.getElementById('size');
+        const cssOutput = document.getElementById('css-output');
+        const generateCssButton = document.getElementById('generate-css');
+
+        xAxisSlider.addEventListener('input', updatePosition);
+        yAxisSlider.addEventListener('input', updatePosition);
+        sizeSlider.addEventListener('input', updateSize);
+        generateCssButton.addEventListener('click', generateCss);
+
+        function updatePosition() {
+            const xPercent = xAxisSlider.value;
+            const yPercent = yAxisSlider.value;
+
+            image.style.left = `${xPercent}%`;
+            image.style.top = `${yPercent}%`;
+        }
+
+        function updateSize() {
+            const size = sizeSlider.value;
+
+            image.style.width = `${size}px`;
+            image.style.height = 'auto'; // Maintain aspect ratio
+        }
+
+        function generateCss() {
+            const xPercent = xAxisSlider.value;
+            const yPercent = yAxisSlider.value;
+            const size = sizeSlider.value;
+
+            const css = `
+                position: absolute;
+                top: ${yPercent}%;
+                left: ${xPercent}%;
+                width: ${size}px;
+                transform: translate(-50%, -50%);
+            `;
+
+            cssOutput.value = css.trim();
+        }
+    </script>
+</body>
+</html>
